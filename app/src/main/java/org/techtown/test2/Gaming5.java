@@ -81,6 +81,7 @@ public class Gaming5 extends AppCompatActivity {
             i++;
         }
 
+
         @Override
         public void onFinish() {
             sleep(1000);
@@ -90,12 +91,35 @@ public class Gaming5 extends AppCompatActivity {
         }
     }
 
+    class ReadyTimer extends CountDownTimer {
+
+        public ReadyTimer(long milliSec, long countSec) {
+            super(milliSec, countSec);
+        }
+
+        int i = 2;
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            game_board.setBackgroundResource(R.drawable.ready1 + i);
+            i--;
+        }
+
+
+        @Override
+        public void onFinish() {
+            System.out.println("===============================시작===============================");
+            myTimer.start();
+        }
+    }
+
+
     private static final String TAG = "MainActivity";
     ImageView game_board;
     TextView main_txt;
     MyTimer myTimer;
-
     MyTimer2 myTimer2;
+    ReadyTimer ready;
 
     int[] question = new int[10];//문제
     int[] game_answer = new int[8];//문제 정답  O : 0, X : 1
@@ -116,6 +140,7 @@ public class Gaming5 extends AppCompatActivity {
         setContentView(R.layout.activity_gaming5);
         myTimer = new MyTimer(20000, 2000);
         myTimer2 = new MyTimer2(1000, 1000);
+        ready = new ReadyTimer(3000,1000);
 
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -136,10 +161,10 @@ public class Gaming5 extends AppCompatActivity {
         TextView txt = (TextView) findViewById(R.id.main_txt);
         Button start_btn = (Button) findViewById(R.id.start_btn);
         if (check_num == 0) {
-            txt.setText("보드판 바뀌기 시작!");
+            txt.setText("준비");
             start_btn.setVisibility(View.INVISIBLE);
         }
-        myTimer.start();
+        ready.start();
     }
 
     public void onButtonOClicked(View v) {
@@ -167,7 +192,7 @@ public class Gaming5 extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(Gaming5.this);
         builder.setTitle("N_BACK");
-        builder.setMessage("맞은갯수 : " + total_cnt);
+        builder.setMessage("맞은갯수 : " + total_cnt+"/8");
         builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

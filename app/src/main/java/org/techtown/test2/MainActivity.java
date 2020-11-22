@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onTick(long millisUntilFinished) {
             sleep(1000);
-            game_board.setBackgroundResource(R.drawable.low1);
+            game_board.setBackgroundResource(R.drawable.frame1);
             System.out.println("__________________after sleep____________________");
         }
 
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             main_txt.setText(String.valueOf(i + 1));
             pushed = i;
             random_num = (int) (Math.random() * 16) + 1;
-            game_board.setBackgroundResource(R.drawable.frame1 + random_num);
+            game_board.setBackgroundResource(R.drawable.frame1+random_num);
             question[i] = random_num;
             System.out.println("__________________before sleep____________________");
 
@@ -76,12 +76,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    class ReadyTimer extends CountDownTimer {
+
+        public ReadyTimer(long milliSec, long countSec) {
+            super(milliSec, countSec);
+        }
+
+        int i = 2;
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            game_board.setBackgroundResource(R.drawable.rdy1 + i);
+            i--;
+        }
+
+
+        @Override
+        public void onFinish() {
+            System.out.println("===============================시작===============================");
+            myTimer.start();
+        }
+    }
+
 
     ImageView game_board;
     TextView main_txt;
     MyTimer myTimer;
-
     MyTimer2 myTimer2;
+    ReadyTimer ready;
 
     int[] question = new int[20];//문제
     int[] game_answer = new int[18];//문제 정답  O : 0, X : 1
@@ -100,8 +122,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        myTimer = new MyTimer(20000, 2000);
+        myTimer = new MyTimer(40000, 2000);
         myTimer2 = new MyTimer2(1000, 1000);
+        ready = new ReadyTimer(3000,1000);
 
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -128,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         TextView txt = (TextView) findViewById(R.id.main_txt);
         Button start_btn = (Button) findViewById(R.id.start_btn);
         if (check_num == 0) {
-            txt.setText("보드판 바뀌기 시작!");
+            txt.setText("준비");
             start_btn.setVisibility(View.INVISIBLE);
         }
         myTimer.start();
@@ -149,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("N_BACK");
-        builder.setMessage("맞은갯수 : " + total_cnt);
+        builder.setMessage("맞은갯수 : " + total_cnt+"/18");
         builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
