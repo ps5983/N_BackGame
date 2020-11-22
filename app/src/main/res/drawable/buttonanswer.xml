@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#CCEDA2"> <!-- Ripple color :: WHITE (눌린 후 색상) -->
+
+    <item>
+        <!-- Normal bg color :: #164A7D (눌리기 전 색상) -->
+        <color android:color="#8BC34A" />
+        <size
+            android:width="200dp"
+            android:height="90dp"
+            />
+    </item>
+
+</ripple>
